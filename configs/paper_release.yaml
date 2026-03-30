@@ -1,0 +1,84 @@
+experiment:
+  embedding_model: all-MiniLM-L6-v2
+  description_model: gpt-5-mini
+  description_model_tag: gpt_5_mini
+  reasoning_model: gpt-5
+  topk: 10
+  runs_per_query: 2
+  default_query_set: standard
+
+floors:
+  "Lighthouse - Floor 3":
+    path: data/Lighthouse - Floor 3
+    index_name: lighthouse-floor-3
+    meters_per_pixel: 0.022
+    node_descriptions: descriptions/node_images_gpt_5_mini.json
+    query_files:
+      standard: descriptions/query_images_gpt_5_mini.json
+      extra: descriptions/query_extra_images_gpt_5_mini.json
+    relative_locations_file: descriptions/node_relative_locations.txt
+    images_locations_dir: data/Lighthouse - Floor 3/images locations
+    node_images_dir: Node images
+    query_images_dir:
+      standard: Query images
+      extra: Query images old
+
+  "Lighthouse - Floor 6":
+    path: data/Lighthouse - Floor 6
+    index_name: lighthouse-floor-6
+    meters_per_pixel: 0.0109
+    node_descriptions: descriptions/node_images_gpt_5_mini.json
+    query_files:
+      standard: descriptions/query_images_gpt_5_mini.json
+      extra: descriptions/query_extra_images_gpt_5_mini.json
+    relative_locations_file: descriptions/node_relative_locations.txt
+    images_locations_dir: data/Lighthouse - Floor 6/images locations
+    node_images_dir: Node images
+    query_images_dir:
+      standard: Query images
+      extra: Query images hard
+
+  "CEPSR - Floor 7":
+    path: data/CEPSR - Floor 7
+    index_name: cepsr-floor-7
+    meters_per_pixel: 0.0513
+    node_descriptions: descriptions/node_images_gpt_5_mini.json
+    query_files:
+      standard: descriptions/query_images_gpt_5_mini.json
+      extra: descriptions/query_extra_images_gpt_5_mini.json
+    relative_locations_file: descriptions/node_relative_locations.txt
+    images_locations_dir: data/CEPSR - Floor 7/Images locations
+    node_images_dir: Node images
+    query_images_dir:
+      standard: Query images
+      extra: Query images hard
+
+  "ACC - Floor 17":
+    path: data/ACC - Floor 17
+    index_name: acc-floor-17
+    meters_per_pixel: 0.021
+    node_descriptions: descriptions/node_images_gpt_5_mini.json
+    query_files:
+      standard: descriptions/query_images_gpt_5_mini.json
+      extra: descriptions/query_extra_images_gpt_5_mini.json
+    relative_locations_file: descriptions/node_relative_locations.txt
+    images_locations_dir: data/ACC - Floor 17/Images locations
+    node_images_dir: Node images
+    query_images_dir:
+      standard: Query images
+      extra: Query images old
+
+  "6 Metrotech - Floor 4":
+    path: data/6 Metrotech - Floor 4
+    index_name: metrotech-floor-4
+    meters_per_pixel: 0.012
+    node_descriptions: descriptions/node_images_gpt_5_mini.json
+    query_files:
+      standard: descriptions/query_images_gpt_5_mini.json
+      extra: descriptions/query_extra_images_gpt_5_mini.json
+    relative_locations_file: descriptions/node_relative_locations.txt
+    images_locations_dir: data/6 Metrotech - Floor 4/Images locations
+    node_images_dir: Node images
+    query_images_dir:
+      standard: Query images
+      extra: extra query images

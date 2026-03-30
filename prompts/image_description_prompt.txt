@@ -1,0 +1,31 @@
+I am going to show you a photograph taken from a particular node location and orientation on a building floor. Describe the full scene and extract every stable visual cue that could help localize another image against it.
+
+Return JSON only in the following format:
+
+{
+  "view_type": "<corridor|room doorway|wall view|stairwell|elevator lobby|unknown|other>",
+  "visual_feature": [
+    {
+      "type": "<door|bulletin board|trash bin|sign|elevator button|wall feature|floor pattern|stairs|art|plant|chair|couch|reception|posters|window|mirror|unknown|other>",
+      "description": "<short closed-form description>",
+      "relative_position_laterality": "<left|center|right>",
+      "relative_position_distance": "<near|middle|far>",
+      "relative_position_verticality": "<low|middle|high>",
+      "distance_from_camera_m": <estimated numeric distance in meters>,
+      "any_text": "<visible text or empty string>",
+      "Long form open description": "<detailed open description of shape, color, texture, text, and placement>",
+      "Location relative to other objects in the environment": "<relationship to surrounding objects>"
+    }
+  ],
+  "floor_pattern": "<plain tile|carpet|parquet|black-white checker tile|unknown|other>",
+  "lighting_ceiling": "<fluorescent ceiling panels|recessed lights|natural light source|unknown|other>",
+  "wall color": "<dominant wall color description>",
+  "additional_notes": "<other useful localization details>",
+  "image_summary": "<complete scene summary>"
+}
+
+Guidelines:
+- Focus on permanent or semi-permanent visual features.
+- Include signs, text, furniture, windows, displays, wall features, floor cues, and architectural details.
+- Be as specific as possible about color, material, count, and spatial layout.
+- If a field is unknown, use "unknown" instead of omitting it.
