@@ -22,7 +22,7 @@ The repository is organized so a user can start from raw images, generate descri
 
 The dataset is not stored in Git. Download it separately and place the extracted floor folders under `data/`.
 
-[Google Drive Dataset](https://drive.google.com/drive/folders/1nD8qnsbukBmhBmdfeqi9hmT5QiMFA5i4?usp=sharing)
+[Google Drive Dataset](https://drive.google.com/drive/folders/14-LCf6rt0_J5cBuAng0onB16IxEWLYHt?usp=sharing)
 
 
 After downloading, your local repository should look like:
