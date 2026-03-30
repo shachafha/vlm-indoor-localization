@@ -16,9 +16,14 @@ def load_prompt(prompt_path: str | Path) -> str:
         return handle.read().strip()
 
 
-def list_images(folder: str | Path) -> list[Path]:
+def list_images(folder: str | Path, allowed_filenames: set[str] | None = None) -> list[Path]:
     root = Path(folder)
-    return sorted(path for path in root.iterdir() if path.suffix in IMAGE_EXTENSIONS)
+    return sorted(
+        path
+        for path in root.iterdir()
+        if path.suffix in IMAGE_EXTENSIONS
+        and (allowed_filenames is None or path.name in allowed_filenames)
+    )
 
 
 def _encode_image(path: Path) -> str:
@@ -70,6 +75,7 @@ def describe_images(
     output_path: str | Path,
     model_name: str,
     image_kind: str,
+    allowed_filenames: set[str] | None = None,
 ) -> Path:
     if image_kind not in {"node", "query"}:
         raise ValueError("image_kind must be 'node' or 'query'.")
@@ -78,7 +84,7 @@ def describe_images(
     prompt = load_prompt(prompt_path)
     records = []
 
-    for image_path in list_images(images_folder):
+    for image_path in list_images(images_folder, allowed_filenames=allowed_filenames):
         mime = "image/png" if image_path.suffix.lower() == ".png" else "image/jpeg"
         encoded = _encode_image(image_path)
         response = client.chat.completions.create(

@@ -78,7 +78,6 @@ def run_localization(config: dict[str, Any], api_keys: dict[str, str]) -> Path:
     fieldnames = [
         "query_image_name",
         "floor_name",
-        "query_set",
         "try_num",
         "identified_location",
         "facing_direction",
@@ -185,7 +184,6 @@ def run_localization(config: dict[str, Any], api_keys: dict[str, str]) -> Path:
                     {
                         "query_image_name": query_name,
                         "floor_name": config["floor_name"],
-                        "query_set": config["query_set"],
                         "try_num": attempt,
                         "identified_location": parsed.get("identified_location", ""),
                         "facing_direction": parsed.get("facing_direction", ""),

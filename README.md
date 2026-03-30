@@ -91,24 +91,11 @@ python3 scripts/generate_descriptions.py \
 
 ### 2. Generate query descriptions
 
-Standard query set:
-
 ```bash
 python3 scripts/generate_descriptions.py \
   --config configs/paper_release.yaml \
   --floor "Lighthouse - Floor 3" \
-  --image-kind query \
-  --query-set standard
-```
-
-Extra query set:
-
-```bash
-python3 scripts/generate_descriptions.py \
-  --config configs/paper_release.yaml \
-  --floor "Lighthouse - Floor 3" \
-  --image-kind query \
-  --query-set extra
+  --image-kind query
 ```
 
 ### 3. Build the Pinecone index
@@ -124,8 +111,7 @@ python3 scripts/build_index.py \
 ```bash
 python3 scripts/run_localization.py \
   --config configs/paper_release.yaml \
-  --floor "Lighthouse - Floor 3" \
-  --query-set standard
+  --floor "Lighthouse - Floor 3"
 ```
 
 This writes predictions to `outputs/`.
@@ -136,7 +122,6 @@ Optional: include distance estimation against the predicted node image:
 python3 scripts/run_localization.py \
   --config configs/paper_release.yaml \
   --floor "Lighthouse - Floor 3" \
-  --query-set standard \
   --include-distance
 ```
 
@@ -152,7 +137,7 @@ When `--include-distance` is enabled, the output CSV also includes:
 
 ```bash
 python3 scripts/evaluate_localization.py \
-  --predictions outputs/lighthouse-floor-3_gpt-5_top10_standard.csv
+  --predictions outputs/lighthouse-floor-3_gpt-5_top10_all.csv
 ```
 
 This writes:
@@ -164,10 +149,9 @@ Optional: also evaluate the distance stage:
 
 ```bash
 python3 scripts/evaluate_localization.py \
-  --predictions outputs/lighthouse-floor-3_gpt-5_top10_standard.csv \
+  --predictions outputs/lighthouse-floor-3_gpt-5_top10_all.csv \
   --config configs/paper_release.yaml \
   --floor "Lighthouse - Floor 3" \
-  --query-set standard \
   --evaluate-distance
 ```
 
@@ -204,16 +188,13 @@ Each new floor should follow the same layout as the existing floors. A typical l
 data/<New Floor>/
 ├── Node images/
 ├── Query images/
-├── Query images old/              # or another folder used for the extra query set
 ├── descriptions/
 │   ├── node_images_gpt_5_mini.json
 │   ├── query_images_gpt_5_mini.json
-│   ├── query_extra_images_gpt_5_mini.json
 │   └── node_relative_locations.txt
 ├── Images locations/              # folder name must match your config entry
 │   ├── nodes_locations_coordinates.csv
-│   ├── query_locations_coordinates.csv
-│   └── query_extra_locations_coordinates.csv
+│   └── query_locations_coordinates.csv
 └── Floorplan/
 ```
 
@@ -222,6 +203,7 @@ Notes:
 - The exact folder names are configurable, but they must match the paths in [`configs/paper_release.yaml`](/Users/shachafhaviv/Projects/vlm-indoor-localization/configs/paper_release.yaml).
 - The description JSON files do not need to exist before running the description-generation scripts; they will be created automatically.
 - The `node_relative_locations.txt` file must be created by you for the new floor.
+- All query images share the same `Query images/` folder and are described into a single `query_images_gpt_5_mini.json` file.
 
 ### Filename conventions
 
@@ -265,15 +247,11 @@ floors:
     index_name: my-building-floor-1
     meters_per_pixel: 0.02
     node_descriptions: descriptions/node_images_gpt_5_mini.json
-    query_files:
-      standard: descriptions/query_images_gpt_5_mini.json
-      extra: descriptions/query_extra_images_gpt_5_mini.json
+    query_file: descriptions/query_images_gpt_5_mini.json
     relative_locations_file: descriptions/node_relative_locations.txt
     images_locations_dir: data/My Building - Floor 1/Images locations
     node_images_dir: Node images
-    query_images_dir:
-      standard: Query images
-      extra: Query images old
+    query_images_dir: Query images
 ```
 
 Field meanings:
@@ -282,19 +260,18 @@ Field meanings:
 - `index_name`: Pinecone index name for this floor
 - `meters_per_pixel`: required only if you want distance evaluation
 - `node_descriptions`: output JSON for generated node descriptions
-- `query_files`: output JSONs for generated standard and extra query descriptions
+- `query_file`: output JSON for generated query descriptions
 - `relative_locations_file`: text file describing relative relationships between nodes
 - `images_locations_dir`: folder containing coordinate CSVs
 - `node_images_dir`: folder containing node images
-- `query_images_dir`: folders containing standard and extra query images
+- `query_images_dir`: shared folder containing both standard and extra query images
 
 ### Minimum setup checklist
 
 Before running the pipeline on a new floor, make sure you have:
 
 - node images in the configured `node_images_dir`
-- query images in the configured standard query directory
-- optional extra query images in the configured extra query directory
+- all query images in the configured `query_images_dir`
 - a `node_relative_locations.txt` file
 - a matching floor entry in [`configs/paper_release.yaml`](/Users/shachafhaviv/Projects/vlm-indoor-localization/configs/paper_release.yaml)
 - valid filename conventions for both node and query images
@@ -303,8 +280,7 @@ If you also want distance evaluation for a new floor, make sure you have:
 
 - `meters_per_pixel` set for that floor in [`configs/paper_release.yaml`](/Users/shachafhaviv/Projects/vlm-indoor-localization/configs/paper_release.yaml)
 - `nodes_locations_coordinates.csv` inside the configured images-locations folder
-- `query_locations_coordinates.csv` for the standard query set
-- `query_extra_locations_coordinates.csv` for the extra query set if you evaluate extra queries
+- `query_locations_coordinates.csv` containing all query images
 
 ### Running the pipeline for a new floor
 
@@ -327,8 +303,7 @@ python3 scripts/generate_descriptions.py \
 python3 scripts/generate_descriptions.py \
   --config configs/paper_release.yaml \
   --floor "My Building - Floor 1" \
-  --image-kind query \
-  --query-set standard
+  --image-kind query
 
 python3 scripts/build_index.py \
   --config configs/paper_release.yaml \
@@ -336,8 +311,7 @@ python3 scripts/build_index.py \
 
 python3 scripts/run_localization.py \
   --config configs/paper_release.yaml \
-  --floor "My Building - Floor 1" \
-  --query-set standard
+  --floor "My Building - Floor 1"
 ```
 
 ## Notes On Reproducibility

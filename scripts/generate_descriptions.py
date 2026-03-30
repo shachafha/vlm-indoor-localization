@@ -17,7 +17,6 @@ def main() -> None:
     parser.add_argument("--config", default="configs/paper_release.yaml")
     parser.add_argument("--floor", required=True)
     parser.add_argument("--image-kind", choices=["node", "query"], required=True)
-    parser.add_argument("--query-set", choices=["standard", "extra"], default="standard")
     args = parser.parse_args()
 
     load_dotenv()
@@ -34,9 +33,11 @@ def main() -> None:
     if args.image_kind == "node":
         images_folder = floor_root / floor_cfg["node_images_dir"]
         output_path = floor_root / floor_cfg["node_descriptions"]
+        allowed_filenames = None
     else:
-        images_folder = floor_root / floor_cfg["query_images_dir"][args.query_set]
-        output_path = floor_root / floor_cfg["query_files"][args.query_set]
+        images_folder = floor_root / floor_cfg["query_images_dir"]
+        output_path = floor_root / floor_cfg["query_file"]
+        allowed_filenames = None
 
     result_path = describe_images(
         api_key=api_key,
@@ -45,6 +46,7 @@ def main() -> None:
         output_path=output_path,
         model_name=model_name,
         image_kind=args.image_kind,
+        allowed_filenames=allowed_filenames,
     )
     print(f"Saved descriptions to {result_path.relative_to(PROJECT_ROOT)}")
 

@@ -18,7 +18,6 @@ def main() -> None:
     parser.add_argument("--output-dir", default=None)
     parser.add_argument("--config", default="configs/paper_release.yaml")
     parser.add_argument("--floor", default=None)
-    parser.add_argument("--query-set", choices=["standard", "extra"], default=None)
     parser.add_argument(
         "--evaluate-distance",
         action="store_true",
@@ -31,19 +30,16 @@ def main() -> None:
     distance_eval_config = None
     if args.evaluate_distance:
         floor_name = args.floor
-        query_set = args.query_set
         if not floor_name and predictions_path.exists():
             with predictions_path.open("r", encoding="utf-8", newline="") as handle:
                 first_row = next(iter(csv.DictReader(handle)), None)
             if first_row:
                 floor_name = first_row.get("floor_name") or None
-                query_set = query_set or first_row.get("query_set") or None
 
         if floor_name:
             run_config = build_run_config(
                 config_path=args.config,
                 floor_name=floor_name,
-                query_set=query_set,
             )
             distance_eval_config = {
                 "meters_per_pixel": run_config.get("meters_per_pixel"),

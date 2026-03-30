@@ -16,7 +16,6 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run the paper localization pipeline.")
     parser.add_argument("--config", default="configs/paper_release.yaml")
     parser.add_argument("--floor", required=True)
-    parser.add_argument("--query-set", choices=["standard", "extra"], default="standard")
     parser.add_argument("--output-name", default=None)
     parser.add_argument(
         "--include-distance",
@@ -37,7 +36,6 @@ def main() -> None:
     run_config = build_run_config(
         config_path=args.config,
         floor_name=args.floor,
-        query_set=args.query_set,
         output_csv=args.output_name,
         include_distance=args.include_distance,
     )
